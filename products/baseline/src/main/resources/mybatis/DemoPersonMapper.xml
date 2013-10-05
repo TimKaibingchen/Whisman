@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.whisman.biz.account.repository.mybatis.DemoPersonMybatisDao">
+    <resultMap id="BaseResultMap" type="com.whisman.biz.account.entity.DemoPerson">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="person_id" property="personId" jdbcType="INTEGER"/>
+        <result column="first_name" property="firstName" jdbcType="VARCHAR"/>
+        <result column="last_name" property="lastName" jdbcType="VARCHAR"/>
+        <result column="middle_name" property="middleName" jdbcType="VARCHAR"/>
+        <result column="address_id" property="addressId" jdbcType="INTEGER"/>
+        <result column="time_zone_id" property="timeZoneId" jdbcType="INTEGER"/>
+        <result column="locale_id" property="localeId" jdbcType="INTEGER"/>
+        <result column="is_public" property="isPublic" jdbcType="TINYINT"/>
+        <result column="invited_by_user_id" property="invitedByUserId" jdbcType="INTEGER"/>
+        <result column="activation_date" property="activationDate" jdbcType="TIMESTAMP"/>
+        <result column="personal_company_name" property="personalCompanyName" jdbcType="VARCHAR"/>
+        <result column="ne_is_ne_user" property="neIsNeUser" jdbcType="TINYINT"/>
+        <result column="person_profile_img" property="personProfileImg" jdbcType="VARCHAR"/>
+        <result column="ne_is_demo_ne_user" property="neIsDemoNeUser" jdbcType="TINYINT"/>
+        <result column="email_address" property="emailAddress" jdbcType="VARCHAR"/>
+        <result column="email_desc" property="emailDesc" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, person_id, first_name, last_name, middle_name, address_id, time_zone_id, locale_id, 
+    is_public, invited_by_user_id, activation_date, personal_company_name, ne_is_ne_user, 
+    person_profile_img, ne_is_demo_ne_user, email_address, email_desc
+  </sql>
+
+    <select id="searchPage" resultMap="BaseResultMap" parameterType="com.whisman.modules.page.MybatisPage">
+        select
+        <include refid="Base_Column_List"/>
+        from demo_person
+        order by id asc
+    </select>
+</mapper>

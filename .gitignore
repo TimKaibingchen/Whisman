@@ -4,3 +4,21 @@
 *.jar
 *.war
 *.ear
+
+# log Files #
+logs/
+
+# Eclipse Project #
+.metadata/
+.settings/
+.classpath
+.project
+
+# Mac OS #
+.DS_Store
+
+# Intellij #
+/.idea
+*.iws
+*.iml
+*.ipr
