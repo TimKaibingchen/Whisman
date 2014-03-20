@@ -26,11 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * 用户管理类.
- * 
- * @author calvin
+ *
+ * @author Tim
  */
-// Spring Service Bean的标识.
 @Component
 @Transactional
 public class AccountService {

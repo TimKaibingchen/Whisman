@@ -16,9 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * 管理员管理用户的Controller.
- * 
- * @author calvin
+ *
+ * @author Tim
  */
 @Controller
 @RequestMapping(value = "/admin/person")

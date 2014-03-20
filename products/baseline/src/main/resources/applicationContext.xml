@@ -12,22 +12,21 @@
 		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd"
 	default-lazy-init="true">
 
-	<description>Spring公共配置 </description>
+	<description>Spring public Config </description>
 
-	<!-- 使用annotation 自动注册bean, 并保证@Required、@Autowired的属性被注入 -->
 	<context:component-scan base-package="com.whisman">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 		<context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
 	</context:component-scan>
 
-	<!-- Jpa Entity Manager 配置 -->
+	<!-- Jpa Entity Manager config -->
 	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"> 
 		<property name="dataSource" ref="dataSource"/>
 		<property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/>
 		<property name="packagesToScan" value="com.whisman"/>
 		<property name="jpaProperties">
 			<props>
-				<!-- 命名规则 My_NAME->MyName -->
+				<!-- Name converstion rules: My_NAME->MyName -->
 				<prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
 			</props>
 		</property>
@@ -41,15 +40,15 @@
 		</property>
 	</bean>
 
-	<!-- Spring Data Jpa配置 -->
+	<!-- Spring Data Jpa config -->
  	<jpa:repositories base-package="com.whisman"  transaction-manager-ref="transactionManager" entity-manager-factory-ref="entityManagerFactory"/>
 
-    <!-- MyBatis配置 -->
+    <!-- MyBatis config -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
-        <!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->
+        <!-- auto scan entity dir,  don't need Configuration.xml any more-->
         <property name="typeAliasesPackage" value="com.whisman.biz.account.entity" />
-        <!-- 显式指定Mapper文件位置 -->
+        <!-- location for Mapper file -->
         <property name="mapperLocations" value="classpath:/mybatis/*Mapper.xml" />
 
         <property name="plugins">
@@ -67,29 +66,29 @@
         </property>
     </bean>
 
-    <!-- 扫描basePackage下所有以@MyBatisRepository标识的 接口-->
+    <!-- scan all the interface with @MyBatisRepository under folder:basePackage -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.whisman.biz" />
         <property name="annotationClass" value="com.whisman.biz.base.repository.MyBatisRepository"/>
     </bean>
 
-    <!-- Jpa 事务配置 -->
+    <!-- Jpa transaction config -->
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory"/>
 	</bean>
 
-	<!-- 使用annotation定义事务 -->
+	<!-- Transaction config -->
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 
-	<!-- JSR303 Validator定义 -->
+	<!-- JSR303 Validator -->
  	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 	
-	<!-- production环境 -->
+	<!-- production env -->
  	<beans profile="production">
  		<context:property-placeholder ignore-unresolvable="true"
 			location="classpath*:/application.properties" />	
 		
-		<!-- 数据源配置, 使用Tomcat JDBC连接池 -->
+		<!-- datasource, Use Tomcat JDBC Connection Pool -->
 		<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
 			<!-- Connection Info -->
 			<property name="driverClassName" value="${jdbc.driver}" />
@@ -101,22 +100,21 @@
 			<property name="maxActive" value="${jdbc.pool.maxActive}" />
 			<property name="maxIdle" value="${jdbc.pool.maxIdle}" />
 			<property name="defaultAutoCommit" value="false" />
-			<!-- 连接Idle一个小时后超时 -->
+			<!-- timeout after one hours of  Idle-->
 			<property name="timeBetweenEvictionRunsMillis" value="3600000" />
 			<property name="minEvictableIdleTimeMillis" value="3600000" />
 		</bean>
 		
-		<!-- 数据源配置,使用应用服务器的数据库连接池 -->
 		<!--<jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/ExampleDB" />-->
 	</beans>
 	
-	<!-- local development环境 -->
+	<!-- local development Env -->
 	<beans profile="development">
 		<context:property-placeholder ignore-resource-not-found="true"
 			location="classpath*:/application.properties,
           			  classpath*:/application.development.properties" />	
 
-		<!-- Tomcat JDBC连接池 -->
+		<!-- Tomcat JDBC Connection Pool -->
 		<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
 			<property name="driverClassName" value="${jdbc.driver}" />
 			<property name="url" value="${jdbc.url}" />
@@ -126,14 +124,14 @@
 		</bean>
 	</beans>
 	
-	<!-- functional test 环境 -->
+	<!-- functional test env -->
 	<beans profile="functional">
 		<context:property-placeholder ignore-resource-not-found="true"
 			location="classpath*:/application.properties,
           			  classpath*:/application.functional.properties,
           			  classpath*:/application.functional-local.properties" />	
 
-		<!-- Tomcat JDBC连接池 -->
+		<!-- Tomcat JDBC connection pool -->
 		<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
 			<property name="driverClassName" value="${jdbc.driver}" />
 			<property name="url" value="${jdbc.url}" />
@@ -142,19 +140,19 @@
 			<property name="defaultAutoCommit" value="false" />
 		</bean>
 
-		<!-- 初始化数据表结构 -->
+		<!-- init table struture -->
 		<jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
 			<jdbc:script location="classpath:sql/${db.type}/schema.sql" />
 		</jdbc:initialize-database>	
 	</beans>
 	
-	<!-- unit test环境 -->
+	<!-- unit test env -->
 	<beans profile="test">
 	 	<context:property-placeholder ignore-resource-not-found="true"
 			location="classpath*:/application.properties,
           			  classpath*:/application.test.properties" />	
 		
-		<!-- Spring Simple连接池 -->
+		<!-- Spring Simple conection pool -->
 		<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
 			<property name="driverClass" value="${jdbc.driver}" />
 			<property name="url" value="${jdbc.url}" />
@@ -162,7 +160,7 @@
 			<property name="password" value="${jdbc.password}" />
 		</bean>
 
-		<!-- 初始化数据表结构 与默认数据-->
+		<!-- Init table Struture and data-->
 		<jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
 			<jdbc:script location="classpath:sql/h2/schema.sql" />
 			<jdbc:script location="classpath:data/h2/import-data.sql" encoding="UTF-8"/>
