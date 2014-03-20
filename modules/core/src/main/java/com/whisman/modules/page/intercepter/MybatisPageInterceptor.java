@@ -108,11 +108,11 @@ public class MybatisPageInterceptor implements Interceptor {
 
     private static class ReflectUtil {
         /**
-         * 利用反射获取指定对象的指定属性
+         * get Field value  from Object by Reflection
          *
-         * @param obj       目标对象
-         * @param fieldName 目标属性
-         * @return 目标属性的值
+         * @param obj       target object
+         * @param fieldName target field Name
+         * @return target field Value
          */
         public static Object getFieldValue(Object obj, String fieldName) {
             Object result = null;
@@ -132,11 +132,11 @@ public class MybatisPageInterceptor implements Interceptor {
         }
 
         /**
-         * 利用反射获取指定对象里面的指定属性
+         * get Field from Object by Reflection
          *
-         * @param obj       目标对象
-         * @param fieldName 目标属性
-         * @return 目标字段
+         * @param obj       target object
+         * @param fieldName target field Name
+         * @return target field
          */
         private static Field getField(Object obj, String fieldName) {
             Field field = null;
@@ -145,18 +145,18 @@ public class MybatisPageInterceptor implements Interceptor {
                     field = clazz.getDeclaredField(fieldName);
                     break;
                 } catch (NoSuchFieldException e) {
-                    //这里不用做处理，子类没有该字段可能对应的父类有，都没有就返回null。
+                    //just return null if there is no such field, no need to handle the exception。
                 }
             }
             return field;
         }
 
         /**
-         * 利用反射设置指定对象的指定属性为指定的值
+         * Set value of Field by Reflection
          *
-         * @param obj        目标对象
-         * @param fieldName  目标属性
-         * @param fieldValue 目标值
+         * @param obj        target object
+         * @param fieldName  target field Name
+         * @param fieldValue target field
          */
         public static void setFieldValue(Object obj, String fieldName,
                                          String fieldValue) {
